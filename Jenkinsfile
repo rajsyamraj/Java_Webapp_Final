@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REMOTE_USER = 'jenkins'
-        REMOTE_HOST = '192.168.1.32'
+        REMOTE_HOST = '192.168.1.31'
         REMOTE_DIR = '/apps/javaapp'
         JAR_NAME = 'hello-devops-1.0-SNAPSHOT.jar'
     }
