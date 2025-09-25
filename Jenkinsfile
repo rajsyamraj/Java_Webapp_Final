@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'Ubuntu2' }
 
     environment {
         REMOTE_USER = 'jenkins'
@@ -11,7 +11,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-ssh', url: 'git@github.com:rajsyamraj/Java_Webapp_Final.git', branch: 'main'
+                sshagent(['github-ssh']) {
+                    git url: 'git@github.com:rajsyamraj/Java_Webapp_Final.git', branch: 'main'
+                }
             }
         }
 
