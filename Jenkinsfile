@@ -17,6 +17,7 @@ pipeline {
                 sh '''
                     chmod +x ${JAR_NAME}
                     nohup java -jar ${JAR_NAME} > app.log 2>&1 &
+                    exit 0
                 '''
             }
         }
