@@ -5,13 +5,13 @@ pipeline {
         REMOTE_USER = 'jenkins'
         REMOTE_HOST = '192.168.1.32'
         REMOTE_DIR = '/apps/javaapp'
-        JAR_NAME = 'hello-devops-1.0-SNAPSHOT.jar' // Replace with actual jar name
+        JAR_NAME = 'hello-devops-1.0-SNAPSHOT.jar'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/rajsyamraj/-apps-Java_Webapp_Final.git', branch: 'main'
+                git credentialsId: 'github-ssh', url: 'git@github.com:rajsyamraj/Java_Webapp_Final.git', branch: 'main'
             }
         }
 
