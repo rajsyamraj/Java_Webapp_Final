@@ -17,38 +17,22 @@ pipeline {
             }
         }
 
-        stage('Copy JAR to Remote VM') {
+        stage('Deploy to Remote VM') {
             steps {
-                sh """
-                    scp -o StrictHostKeyChecking=no ${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
-                """
-            }
-        }
+                sshagent(['github-ssh']) {
+                    sh """
+                        scp -o StrictHostKeyChecking=no target/${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
 
-        stage('Stop Existing App on Remote VM') {
-            steps {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    'pkill -f ${JAR_NAME} || echo "No running app found"'
-                """
-            }
-        }
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
+                        'pkill -f ${JAR_NAME} || echo "No running app found"'
 
-        stage('Run App on Remote VM') {
-            steps {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    'cd ${REMOTE_DIR} && nohup java -jar ${JAR_NAME} > app.log 2>&1 & disown'
-                """
-            }
-        }
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
+                        'cd ${REMOTE_DIR} && nohup java -jar ${JAR_NAME} > app.log 2>&1 & disown'
 
-        stage('Verify App Status') {
-            steps {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    'pgrep -f "${JAR_NAME}" && echo "✅ App is running." || (echo "❌ App is NOT running." && exit 1)'
-                """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
+                        'pgrep -f "${JAR_NAME}" && echo "✅ App is running." || (echo "❌ App is NOT running." && exit 1)'
+                    """
+                }
             }
         }
     }
