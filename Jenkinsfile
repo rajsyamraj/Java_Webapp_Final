@@ -37,7 +37,7 @@ pipeline {
         stage('Stop Existing App on Remote VM') {
             steps {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "pkill -f ${JAR_NAME}; echo 'No running apps found'"
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "echo 'No running apps found'"
                 """
             }
         }
