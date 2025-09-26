@@ -19,19 +19,18 @@ pipeline {
 
         stage('Copy JAR to Remote VM') {
             steps {
-                sh '''
+                sh """
                     scp -o StrictHostKeyChecking=no ${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
-                '''
+                """
             }
         }
 
         stage('Stop Existing App on Remote VM') {
             steps {
-                sh '''
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
-                        pkill -f ${JAR_NAME} || echo "No running app found"
-                    '
-                '''
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
+                    'pkill -f ${JAR_NAME} || echo "No running app found"'
+                """
             }
         }
 
@@ -39,9 +38,16 @@ pipeline {
             steps {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    cd ${REMOTE_DIR} && nohup java -jar ${JAR_NAME} > app.log 2>&1 & disown'
-                    echo "App started remotely"
-                    '
+                    'cd ${REMOTE_DIR} && nohup java -jar ${JAR_NAME} > app.log 2>&1 & disown'
+                """
+            }
+        }
+
+        stage('Verify App Status') {
+            steps {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
+                    'pgrep -f "${JAR_NAME}" && echo "✅ App is running." || (echo "❌ App is NOT running." && exit 1)'
                 """
             }
         }
