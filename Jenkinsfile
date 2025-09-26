@@ -40,7 +40,8 @@ pipeline {
                 sh '''
                     ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
                         cd ${REMOTE_DIR} &&
-                        nohup java -jar ${JAR_NAME} > app.log 2>&1 &
+                        #nohup java -jar ${JAR_NAME} > app.log 2>&1 &
+                        nohup java -jar hello-devops-1.0-SNAPSHOT.jar > app.log 2>&1 &
                         echo "App started remotely"
                     '
                 '''
