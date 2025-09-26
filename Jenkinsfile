@@ -21,7 +21,7 @@ pipeline {
             steps {
                 sshagent(['github-ssh']) {
                     sh """
-                        scp -o StrictHostKeyChecking=no target/${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
+                        scp -o StrictHostKeyChecking=no ${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
 
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
                         'pkill -f ${JAR_NAME} || echo "No running app found"'
