@@ -39,9 +39,14 @@ pipeline {
             steps {
                 sh '''
                     ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                        echo "Current directory: $(pwd)"
+                        echo "Listing contents of ${REMOTE_DIR}:"
+                        ls -l ${REMOTE_DIR}
                         cd ${REMOTE_DIR} && \
-                        nohup java -jar ${JAR_NAME} > app.log 2>&1 &
-                        echo "App started remotely"
+                        echo "Starting app..." && \
+                        nohup /usr/bin/java -jar ${JAR_NAME} > app.log 2>&1 & \
+                        sleep 2 && \
+                        ps aux | grep ${JAR_NAME} | grep -v grep || echo "App not running"
                     '
                 '''
             }
