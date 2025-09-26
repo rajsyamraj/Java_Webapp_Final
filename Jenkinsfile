@@ -45,7 +45,7 @@ pipeline {
         stage('Run App on Remote VM') {
             steps {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh ${REMOTE_DIR}/${SERVICE_FILE}"                                         
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh ${REMOTE_DIR}/${SERVICE_FILE} && sleep 5 && cat app.log"                                         
                 """
             }
         }
