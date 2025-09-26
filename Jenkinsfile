@@ -4,8 +4,8 @@ pipeline {
     environment {
         REMOTE_USER = 'jenkins'
         REMOTE_HOST = '192.168.1.32'
-        REMOTE_DIR = '/apps/javaapp'
-        JAR_NAME = 'hello-devops-1.0-SNAPSHOT.jar'
+        REMOTE_DIR  = '/apps/javaapp'
+        JAR_NAME    = 'hello-devops-1.0-SNAPSHOT.jar'
     }
 
     stages {
@@ -17,11 +17,18 @@ pipeline {
             }
         }
 
+        // Optional: Uncomment if you want to build the jar using Maven
+        // stage('Build') {
+        //     steps {
+        //         sh 'mvn clean package'
+        //     }
+        // }
+
         stage('Deploy and Run on Remote VM') {
             steps {
-                sshagent(['github-ssh']) {
+                sshagent(['jenkins']) {
                     sh """
-                        # Copy JAR
+                        # Copy JAR from repo root
                         scp -o StrictHostKeyChecking=no ${JAR_NAME} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
 
                         # Stop existing app
