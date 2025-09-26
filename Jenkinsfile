@@ -43,8 +43,6 @@ pipeline {
                     echo 'Starting app...' && \\
                     nohup /usr/bin/java -jar ${JAR_NAME} > app.log 2>&1 & \\
                     sleep 2 && \\
-                    echo "Starting app..." && \\
-                    ps aux | grep ${JAR_NAME} | grep -v grep || echo 'App not running'"
                     cat app.log                     
                 """
             }
