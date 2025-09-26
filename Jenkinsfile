@@ -42,7 +42,7 @@ pipeline {
                     cd ${REMOTE_DIR} && nohup java -jar ${JAR_NAME} > app.log 2>&1 & disown'
                     echo "App started remotely"
                     '
-                '''
+                """
             }
         }
     }
