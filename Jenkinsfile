@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 sshagent(['github-ssh']) {
-                    git url: 'git@github.com:rajsyamraj/Java_Webapp_Final.git', branch: 'main'
+                    git url: 'git@github.com:rajsyamraj/Java_Webapp_Final.git', branch: 'master'
                 }
             }
         }
