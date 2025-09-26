@@ -5,7 +5,8 @@ pipeline {
         REMOTE_USER = 'jenkins'
         REMOTE_HOST = '192.168.1.32'
         REMOTE_DIR = '/apps/javaapp'
-        SERVICE_FILE = 'run.sh'
+        START_FILE = 'start.sh'
+        STOP_FILE = 'stop.sh'
         JAR_NAME = 'hello-devops-1.0-SNAPSHOT.jar'
     }
 
@@ -29,7 +30,7 @@ pipeline {
         stage('Copy service file to Remote VM') {
             steps {
                 sh '''
-                    scp -o StrictHostKeyChecking=no ${SERVICE_FILE} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
+                    scp -o StrictHostKeyChecking=no ${START_FILE} ${STOP_FILE} ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
                 '''
             }
         }        
@@ -37,7 +38,7 @@ pipeline {
         stage('Stop Existing App on Remote VM') {
             steps {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh -c '/usr/bin/pkill -f ${JAR_NAME}'"
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh ${REMOTE_DIR}/${STOP_FILE}"
                 """
             }
         }
@@ -45,7 +46,7 @@ pipeline {
         stage('Run App on Remote VM') {
             steps {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh ${REMOTE_DIR}/${SERVICE_FILE}"                                         
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "/bin/sh ${REMOTE_DIR}/${START_FILE}"                                         
                 """
             }
         }
