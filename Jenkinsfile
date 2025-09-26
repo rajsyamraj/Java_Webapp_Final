@@ -37,10 +37,7 @@ pipeline {
         stage('Run App on Remote VM') {
             steps {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    "cd ${REMOTE_DIR} && \\
-                    echo 'Starting app...' && \\
-                    nohup /usr/bin/java -jar ${JAR_NAME} > app.log 2>&1 &"                     
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "nohup /usr/bin/java -jar ${REMOTE_DIR}/${JAR_NAME} > app.log 2>&1"                                         
                 """
             }
         }
