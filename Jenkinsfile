@@ -38,7 +38,7 @@ pipeline {
             steps {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} \\
-                    "pkill -f ${SERVICE_FILE} || echo 'No running app found'; true"
+                    "pkill -f ${JAR_NAME} || echo 'No running app found'; true"
                 """
             }
         }
